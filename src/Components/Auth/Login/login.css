@@ -1,0 +1,23 @@
+@media screen and (max-width: 1199px) {
+  .loginCard {
+    width: 30vw !important;
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .loginCard {
+    width: 38vw !important;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .loginCard {
+    width: 48vw !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .loginCard {
+    width: 60vw !important;
+  }
+}

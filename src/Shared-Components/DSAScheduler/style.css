@@ -1,0 +1,47 @@
+
+
+  [data-testid=rs-wrapper]{
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px ;
+  }
+  .rs__event__item{
+    width: 100% !important;
+    margin-top: -4px !important;
+  }
+  .event-tittle{
+    text-align: center !important;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+  }
+  
+  [data-testid=date-navigator] button{
+    /* margin-top: 10px !important; */
+  }
+  [data-testid=date-navigator] .MuiInputBase-formControl{
+    width: 20vw !important;
+    height: 50px !important;
+    padding-top: 0px !important ;
+  }
+  [data-testid=view-navigator] button{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    /* color: #5d953c; */
+  }
+  [data-testid=date-navigator] {
+    border: 1px solid #DFDFDF !important;
+    border-radius: 12px;
+    padding: 3px 10px;
+    margin-bottom: 20px;
+  }
+  .rs__multi_day{
+    top: 30 !important;
+    width: 100%;
+    height: -webkit-fill-available;
+  
+  }
+  
