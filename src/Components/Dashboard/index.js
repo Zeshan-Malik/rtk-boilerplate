@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import { Grid, Typography } from "@mui/material";
-import theme from "../../Config/theme";
 import { getGraphsData } from "./dashboardSlice";
 import { useDispatch } from "react-redux";
-import DSACustomizedDropDown from "../../Shared-Components/CustomDropdown";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const Dashboard = () => {
     const dispatch = useDispatch();

@@ -60,10 +60,6 @@ export default function TopBarLayOut(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const dispatch = useDispatch();
-
-  const userSelectedTheme = useSelector(
-    (state) => {}
-  );
   let themeObj =  "";
   let headerBackground = "#5d953c";
 
@@ -384,8 +380,10 @@ export default function TopBarLayOut(props) {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <TopBar position="static">
+      <Box sx={{ flexGrow: 1,}}>
+        <TopBar position="static"
+        //  sx={{borderRadius:'20px 20px 0px 0px'}}
+         >
           <Toolbar>
             <Box
               component="div"
