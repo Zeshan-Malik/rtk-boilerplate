@@ -5,7 +5,7 @@ import {
   TableRow,
   TableSortLabel,
 } from "@mui/material";
-import theme from "../../theme";
+import theme from "../Config/theme";
 import DSACustomizedCheckbox from "./DSACheckBox";
 
 function DTEnhancedTableHead(props) {

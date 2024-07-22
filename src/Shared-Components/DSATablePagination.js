@@ -1,7 +1,7 @@
 import * as React from "react";
 import TablePagination from "@mui/material/TablePagination";
 import { Box } from "@mui/system";
-import theme from "../../theme";
+import theme from "../Config/theme";
 import { styled } from "@mui/material/styles";
 
 const CustomTablePagination = styled(TablePagination)(({ theme }) => ({

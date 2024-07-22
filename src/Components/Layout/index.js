@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Box, Grid, ListItem, ListItemText, Typography } from "@mui/material";
+import { Box, Grid, ListItem, ListItemText } from "@mui/material";
 import theme from "../../Config/theme";
 import SideBarList from "../../Shared-Components/DSASidebatLIsting";
 import styled from "styled-components";
 import DTSpinner from "../../Shared-Components/DTSpinner";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { convertHexToRGBA } from "../../services/utils";
 import PersonIcon from "@mui/icons-material/Person";
 import PixIcon from '@mui/icons-material/Pix';
@@ -12,11 +12,10 @@ import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import RoomIcon from "@mui/icons-material/Room";
 import Crop169Icon from "@mui/icons-material/Crop169";
 import AlignVerticalBottomIcon from "@mui/icons-material/AlignVerticalBottom";
-import Dashboard from "../Dashboard";
 import TopBarLayOut from "../TopbarLayout.js";
 import { useNavigate } from "react-router-dom";
 
-const MainLayout = (props) => {
+const MainLayout = ({children}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
@@ -115,18 +114,14 @@ const MainLayout = (props) => {
     <>
       <DTSpinner open={loading} />
       <>
+      <TopBarLayOut />
       <Grid
         container
         xs={12}
-        backgroundColor={'red'}
         display={"flex"}
         flexDirection={"row"}
         alignItems={"center"}
-        // spacing={2}
-        // mt={1}
-        // pr={2}
-        className="full-height"
-        // height= {"92vh"}
+        pt={2}
         sx={{
         }}
 
@@ -137,7 +132,8 @@ const MainLayout = (props) => {
               background: `${theme.palette.primary.white}`,
               padding: "20px 10px 10px 14px",
               marginRight: "2vh",
-              minHeight:'96.8vh'
+              borderRadius:'0px 20px 20px 0px',
+              minHeight:'87.5vh'
             }}
           >
              <SideBarList>
@@ -157,7 +153,9 @@ const MainLayout = (props) => {
                             ? `1px solid${convertHexToRGBA(appIconColor)}`
                             : "",
                       }}
-                      onClick={() =>navigate(item.routeName)}
+                      onClick={() =>{
+                        setActive(item.id)
+                        navigate(item.routeName)}}
                     >
                       {item?.icon}
                       <ListItemText primary={item.name} />
@@ -176,16 +174,16 @@ const MainLayout = (props) => {
           </Box>
         </Grid>
         <Grid xs={10}>
-      <TopBarLayOut />
          <Box
             sx={{
               background:theme.palette.primary.white,
-              // borderRadius: "0px 0px 20px 20px",
               padding: "20px 10px 0px 14px",
-              minHeight:'91.2vh'
+              borderRadius:'20px',
+              marginRight:'20px',
+              minHeight:'88vh'
             }}
           >
-            <Dashboard />
+            {children}
           </Box>
         </Grid>
       </Grid>

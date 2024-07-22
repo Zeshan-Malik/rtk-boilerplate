@@ -6,8 +6,9 @@ const API = {
     Login: `${BASE_URL}signin`,
     LogOut: `${BASE_URL}logout`,
   },
-  Dashboard: {
-    graphData: '/graphs',
+  Products: {
+    allProducts: `${BASE_URL}products`,
+    createNewProduct: `${BASE_URL}product`,
   },
   JSONPLACEHOLDER: {
     todos: '/todosss',

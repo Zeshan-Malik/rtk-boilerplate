@@ -4,13 +4,15 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./Config/theme";
 import RouteList from './Config/routes/routes';
 import { BrowserRouter } from 'react-router-dom';
+import MainLayout from "./Components/Layout";
 
 function App() {
   return (
     <BrowserRouter>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <RouteList />
+        <RouteList />            
+
         </ThemeProvider>
       </Provider>
     </BrowserRouter>
