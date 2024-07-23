@@ -10,18 +10,15 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import DTEnhancedTableHead from "./DSAEnhancedTableHead";
-import DragHandleIcon from '@mui/icons-material/DragHandle';
 import theme from "../Config/theme";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DSACustomizedCheckbox from "./DSACheckBox";
 import DSATablePagination from "./DSATablePagination";
 import DTSpinner from "./DTSpinner";
-// import { changeSizeUnit } from "../../services/utils";
 import { useEffect } from "react";
 import {
   SortableContainer,
   SortableHandle,
-  SortableElement,
   arrayMove,
 } from "react-sortable-hoc";
 
@@ -44,22 +41,12 @@ function stableSort(array, comparator) {
 }
 
 function descendingComparator(a, b, orderBy) {
-  // if (orderBy === "size") {
-  //   if (changeSizeUnit(b[orderBy]) < changeSizeUnit(a[orderBy])) {
-  //     return -1;
-  //   }
-  //   if (changeSizeUnit(b[orderBy]) > changeSizeUnit(a[orderBy])) {
-  //     return 1;
-  //   }
-  // } else {
-  //   if (b[orderBy] < a[orderBy]) {
-  //     return -1;
-  //   }
-  //   if (b[orderBy] > a[orderBy]) {
-  //     return 1;
-  //   }
-  // }
-
+     if (b[orderBy] < a[orderBy]) {
+      return -1;
+     }
+     if (b[orderBy] > a[orderBy]) {
+       return 1;
+     }
   return 0;
 }
 
@@ -95,44 +82,9 @@ function DSAEnhancedTable(props) {
     }
     setSelected([]);
   };
-  useEffect(() => {
-    if (props.checkedBoxes) {
-      let temp = [...rows];
-      temp = temp.filter((item) => item.checked);
-      const dummyData = temp.map((item) => item.id);
-      setSelected([...dummyData]);
-    }
-  }, [props.checkedBoxes]);
 
-  // useEffect(()=>{
-  //   if(props?.reloadOnPageChange){
-  //     props.someFunctionHere([]);
-  //     setSelected([]);
-  //   }
-  // },[JSON.stringify(props?.rows)?.length])
   const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (!props.selectSingleItem) {
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1)
-        );
-      }
-    } else {
-      newSelected = [];
-      newSelected.push(name);
-    }
-    props.someFunctionHere(newSelected);
-    setSelected(newSelected);
+   
   };
 
   const handleChangePage = (event, newPage) => {
@@ -146,10 +98,6 @@ function DSAEnhancedTable(props) {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-
-  const handleEdit = (row) => {
-  };
-
   const handleDelete = (row) => {
     props.handleDelete(row.sr);
   };
@@ -157,33 +105,7 @@ function DSAEnhancedTable(props) {
   //Modal End
   var fixOffset = 40;
   var processedColumns = [];
-
-  // Implementation for drag and drop
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    const newArray = [];
-    let resp = arrayMove(rows, oldIndex, newIndex);
-    resp.map((item) => {
-      const newObj = {
-        id: item.id,
-      };
-      newArray.push(newObj);
-    });
-    props.handleRowsDragAndDrop(newArray);
-  };
-
-  const Row = SortableElement(({ data, ...other }) => {
-    return <TableRow {...other}>{other.children}</TableRow>;
-  });
-  // Universal component for turning a TableBody into a sortable container
-  const TableBodySortable = SortableContainer(
-    ({ children, displayRowCheckbox }) => (
-      <TableBody displayRowCheckbox={displayRowCheckbox}>{children}</TableBody>
-    )
-  );
-  //  Component which uses drag-n-drop activation when clicking inside the component
-  const DragHandle = SortableHandle(({ style }) => (
-    <DragHandleIcon sx={{ cursor: 'move' }} />
-  ));
+   
   return (
     <>
       <TableContainer
@@ -241,14 +163,13 @@ function DSAEnhancedTable(props) {
                 </TableCell>
               </TableRow>
             </TableBody>
-          ) : !props.dragRows ? (
+          ) :
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
@@ -258,7 +179,7 @@ function DSAEnhancedTable(props) {
                       key={props.key ? props.key : row.name + index}
                       id={props.id ? props.id : index}
                       selected={isItemSelected}
-                      onClick={props.onClick ? props.onClick : ""}
+                      // onClick={props.onClick ? props.onClick : ""}
                       sx={{
                         cursor: "pointer",
                         "&.Mui-selected, &.Mui-selected:hover": {
@@ -578,8 +499,7 @@ function DSAEnhancedTable(props) {
                                   <img
                                     alt="Edit icon"
                                     onClick={(e) => {
-                                      handleEdit(row);
-                                    }}
+                                    console.log(e)}}
                                   />
                                 ) : (
                                   ""
@@ -587,7 +507,7 @@ function DSAEnhancedTable(props) {
                                 {row[key].includes("settings") ? (
                                   <SettingsIcon
                                     alt="Settings icon"
-                                    onClick={async () => {
+                                    onClick={() => {
                                     }}
                                     style={{
                                       marginLeft: "10px",
@@ -617,393 +537,7 @@ function DSAEnhancedTable(props) {
                     </TableRow>
                   );
                 })}
-            </TableBody>
-          ) : (
-            <TableBodySortable
-              onSortEnd={onSortEnd}
-              useDragHandle
-              displayRowCheckbox={false}
-            >
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <Row
-                      index={index}
-                      data={row}
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={props.key ? props.key : row.name + index}
-                      id={props.id ? props.id : index}
-                      selected={isItemSelected}
-                      onClick={props.onClick ? props.onClick : ""}
-                      sx={{
-                        cursor: "pointer",
-                        "&.Mui-selected, &.Mui-selected:hover": {
-                          backgroundColor:
-                            theme.palette.primary.table.table_row,
-                        },
-                        "&.MuiTableRow-hover": {
-                          "&:hover": {
-                            backgroundColor:
-                              theme.palette.primary.table.table_row,
-                          },
-                        },
-                        fontSize: theme.fonts.small_heading,
-                        cursor: props.cursor ? props.cursor : "",
-                      }}
-                    >
-                      {props.isSetting ? null : (
-                        <CustomTableCell
-                          align="center"
-                          sx={{
-                            position: "sticky",
-                            left: 0,
-                            right: 0,
-                            minWidth: "25px",
-                            background: "#ffffff !important",
-                            zIndex: 10,
-                          }}
-                        >
-                          <DragHandle></DragHandle>
-
-                          <DSACustomizedCheckbox
-                            onClick={(event) => handleClick(event, row.id)}
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                            sx={{
-                              svg: { fill: theme.palette.primary.yellow_dark },
-                            }}
-                          />
-                        </CustomTableCell>
-                      )}
-
-                      {Object.keys(row).map((key) => {
-                        if (headerCells[Object.keys(row).indexOf(key)]) {
-                          if (
-                            headerCells[Object.keys(row).indexOf(key)].type ==
-                            "text"
-                          ) {
-                            if (
-                              headerCells[Object.keys(row).indexOf(key)].avatar
-                            ) {
-                              return (
-                                <CustomTableCell
-                                  component="td"
-                                  id={labelId}
-                                  scope="row"
-                                  sx={{
-                                    marginLeft: "2vh",
-                                    position: headerCells[
-                                      Object.keys(row).indexOf(key)
-                                    ].fixed
-                                      ? "" // sticky
-                                      : "initial",
-                                    left: headerCells[
-                                      Object.keys(row).indexOf(key)
-                                    ].fixed
-                                      ? () => {
-                                        if (
-                                          !processedColumns.includes(
-                                            headerCells[
-                                              Object.keys(row).indexOf(key)
-                                            ].label
-                                          )
-                                        ) {
-                                          processedColumns.push(
-                                            headerCells[
-                                              Object.keys(row).indexOf(key)
-                                            ].label
-                                          );
-                                          var offset = `${fixOffset}px`;
-                                          fixOffset =
-                                            fixOffset +
-                                            Number.parseInt(
-                                              headerCells[
-                                                Object.keys(row).indexOf(key)
-                                              ].minWidth.split("px")[0]
-                                            );
-                                          return offset;
-                                        } else {
-                                          return (
-                                            fixOffset -
-                                            Number.parseInt(
-                                              headerCells[
-                                                Object.keys(row).indexOf(key)
-                                              ].minWidth.split("px")[0]
-                                            )
-                                          );
-                                        }
-                                      }
-                                      : 0,
-                                    background: "#ffffff",
-                                  }}
-                                >
-                                  <span
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    {row[key].value ? row[key].value : row[key]}
-                                    {row[key]?.icons?.map((icon) => {
-                                      return icon.element;
-                                    })}
-                                  </span>
-                                  {row[key].new ? (
-                                    <span className="new-badge">New</span>
-                                  ) : (
-                                    ""
-                                  )}
-                                </CustomTableCell>
-                              );
-                            } else if (
-                              headerCells[Object.keys(row).indexOf(key)].badge
-                            ) {
-                              return (
-                                <CustomTableCell
-                                  align={
-                                    headerCells[Object.keys(row).indexOf(key)]
-                                      .align
-                                  }
-                                  sx={{
-                                    marginLeft: "2vh",
-                                    position: headerCells[
-                                      Object.keys(row).indexOf(key)
-                                    ].fixed
-                                      ? "" // sticky
-                                      : "initial",
-                                    left: headerCells[
-                                      Object.keys(row).indexOf(key)
-                                    ].fixed
-                                      ? () => {
-                                        if (
-                                          !processedColumns.includes(
-                                            headerCells[
-                                              Object.keys(row).indexOf(key)
-                                            ].label
-                                          )
-                                        ) {
-                                          processedColumns.push(
-                                            headerCells[
-                                              Object.keys(row).indexOf(key)
-                                            ].label
-                                          );
-                                          var offset = `${fixOffset}px`;
-                                          fixOffset =
-                                            fixOffset +
-                                            Number.parseInt(
-                                              headerCells[
-                                                Object.keys(row).indexOf(key)
-                                              ].minWidth.split("px")[0]
-                                            );
-                                          return offset;
-                                        } else {
-                                          return (
-                                            fixOffset -
-                                            Number.parseInt(
-                                              headerCells[
-                                                Object.keys(row).indexOf(key)
-                                              ].minWidth.split("px")[0]
-                                            )
-                                          );
-                                        }
-                                      }
-                                      : 0,
-                                    background: "#ffffff",
-                                  }}
-                                >
-                                  <span
-                                    className="new-badge"
-                                    style={{
-                                      color: row[key].color,
-                                      backgroundColor: row[key].background,
-                                      borderRadius: "6px",
-                                    }}
-                                  >
-                                    {typeof row[key] == "object"
-                                      ? row[key].value
-                                      : row[key]}
-                                  </span>
-                                </CustomTableCell>
-                              );
-                            } else {
-                              return (
-                                <CustomTableCell
-                                  align={
-                                    headerCells[Object.keys(row).indexOf(key)]
-                                      .align
-                                  }
-                                  sx={{
-                                    fontSize: theme.fonts.small_heading,
-                                    position: headerCells[
-                                      Object.keys(row).indexOf(key)
-                                    ].fixed
-                                      ? "" // sticky
-                                      : "initial",
-                                    left: headerCells[
-                                      Object.keys(row).indexOf(key)
-                                    ].fixed
-                                      ? () => {
-                                        if (
-                                          !processedColumns.includes(
-                                            headerCells[
-                                              Object.keys(row).indexOf(key)
-                                            ].label
-                                          )
-                                        ) {
-                                          processedColumns.push(
-                                            headerCells[
-                                              Object.keys(row).indexOf(key)
-                                            ].label
-                                          );
-                                          var offset = `${fixOffset}px`;
-                                          fixOffset =
-                                            fixOffset +
-                                            Number.parseInt(
-                                              headerCells[
-                                                Object.keys(row).indexOf(key)
-                                              ].minWidth.split("px")[0]
-                                            );
-
-                                          return offset;
-                                        } else {
-                                          return (
-                                            fixOffset -
-                                            Number.parseInt(
-                                              headerCells[
-                                                Object.keys(row).indexOf(key)
-                                              ].minWidth.split("px")[0]
-                                            )
-                                          );
-                                        }
-                                      }
-                                      : 0,
-                                    background: "#ffffff",
-                                  }}
-                                >
-                                  {row[key]
-                                    ? typeof row[key] == "object"
-                                      ? row[key].value
-                                      : row[key]
-                                    : "--"}
-                                  {row[key] ? (
-                                    row[key].new ? (
-                                      <span className="new-badge">New</span>
-                                    ) : (
-                                      ""
-                                    )
-                                  ) : (
-                                    "--"
-                                  )}
-                                </CustomTableCell>
-                              );
-                            }
-                          } else if (
-                            headerCells[Object.keys(row).indexOf(key)].type ==
-                            "actions"
-                          ) {
-                            return (
-                              <CustomTableCell
-                                align="left"
-                                sx={{
-                                  position: headerCells[
-                                    Object.keys(row).indexOf(key)
-                                  ].fixed
-                                    ? "" // sticky
-                                    : "initial",
-                                  left: headerCells[
-                                    Object.keys(row).indexOf(key)
-                                  ].fixed
-                                    ? () => {
-                                      if (
-                                        !processedColumns.includes(
-                                          headerCells[
-                                            Object.keys(row).indexOf(key)
-                                          ].label
-                                        )
-                                      ) {
-                                        processedColumns.push(
-                                          headerCells[
-                                            Object.keys(row).indexOf(key)
-                                          ].label
-                                        );
-                                        var offset = `${fixOffset}px`;
-                                        fixOffset =
-                                          fixOffset +
-                                          Number.parseInt(
-                                            headerCells[
-                                              Object.keys(row).indexOf(key)
-                                            ].minWidth.split("px")[0]
-                                          );
-
-                                        return offset;
-                                      } else {
-                                        return (
-                                          fixOffset -
-                                          Number.parseInt(
-                                            headerCells[
-                                              Object.keys(row).indexOf(key)
-                                            ].minWidth.split("px")[0]
-                                          )
-                                        );
-                                      }
-                                    }
-                                    : 0,
-                                  background: "#ffffff",
-                                }}
-                              >
-                                {row[key].includes("edit") ? (
-                                  <img
-                                    alt="Edit icon"
-                                    onClick={(e) => {
-                                      handleEdit(row);
-                                    }}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                                {row[key].includes("settings") ? (
-                                  <SettingsIcon
-                                    alt="Settings icon"
-                                    onClick={async () => { }}
-                                    style={{
-                                      marginLeft: "10px",
-                                      fontSize: "18px",
-                                      color: "#C5CACE",
-                                    }}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                                {row[key].includes("delete") ? (
-                                  <img
-                                    alt="Delete icon"
-                                    onClick={(e) => {
-                                      handleDelete(row);
-                                    }}
-                                    style={{ marginLeft: "10px" }}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </CustomTableCell>
-                            );
-                          }
-                        }
-                      })}
-                    </Row>
-                  );
-                })}
-            </TableBodySortable>
-          )}
+            </TableBody>}
         </Table>
       </TableContainer>
       {props.hidePagination ? null : (

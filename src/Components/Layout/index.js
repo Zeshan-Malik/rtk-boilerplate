@@ -14,7 +14,6 @@ import Crop169Icon from "@mui/icons-material/Crop169";
 import AlignVerticalBottomIcon from "@mui/icons-material/AlignVerticalBottom";
 import TopBarLayOut from "../TopbarLayout.js";
 import { useNavigate } from "react-router-dom";
-
 const MainLayout = ({children}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

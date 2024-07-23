@@ -30,6 +30,13 @@ export const getAllProducts = createAsyncThunk("AllProducts",async (data) => {
   return response
  });
 
+ export const getProductById = createAsyncThunk("getProductById", (param) => {
+  const response = getResources(API.Products.createNewProduct+param)
+  return response
+ });
+
+
+
 const DashboardSlice = createSlice({
   name: "dashboard",
   initialState: initialDashboardState,
