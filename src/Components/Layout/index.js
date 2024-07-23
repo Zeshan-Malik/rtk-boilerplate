@@ -65,7 +65,7 @@ const MainLayout = ({children}) => {
     },
     {
       id: 3,
-      name: "License Management",
+      name: "Tab 3",
       icon: (
         <VpnKeyIcon
           sx={{ color: appIconColor, fontSize: "22px", paddingRight: "12px" }}
@@ -74,7 +74,7 @@ const MainLayout = ({children}) => {
     },
     {
       id: 4,
-      name: "Location Management",
+      name: "Tab 4",
       icon: (
         <RoomIcon
           sx={{ color: appIconColor, fontSize: "22px", paddingRight: "12px" }}
@@ -83,7 +83,7 @@ const MainLayout = ({children}) => {
     },
     {
       id: 5,
-      name: "Players Registration",
+      name: "Tab 5",
       icon: (
         <Crop169Icon
           sx={{ color: appIconColor, fontSize: "22px", paddingRight: "12px" }}
@@ -92,22 +92,13 @@ const MainLayout = ({children}) => {
     },
     {
       id: 6,
-      name: "Local Users Management",
+      name: "Tab 6",
       icon: (
         <PersonIcon
           sx={{ color: appIconColor, fontSize: "18px", paddingRight: "12px" }}
         />
       ),
-    },
-    {
-      id: 7,
-      name: "Power Bi Login",
-      icon: (
-        <AlignVerticalBottomIcon
-          sx={{ color: appIconColor, fontSize: "18px", paddingRight: "12px" }}
-        />
-      ),
-    },
+    }
   ];
  
   return (

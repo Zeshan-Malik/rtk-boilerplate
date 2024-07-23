@@ -12,9 +12,9 @@ export const getGraphsData = createAsyncThunk("DashboardIndex", (data) => {
  return response
 });
 
-export const getAllProducts = createAsyncThunk("AllProducts", (data) => {
-  const response = getResources(API.Products.allProducts)
-  return response
+export const getAllProducts = createAsyncThunk("AllProducts",async (data) => {
+  const response = await getResources(API.Products.allProducts)
+  return response.data
  });
 
  export const createNewProduct = createAsyncThunk("createProduct", (data) => {

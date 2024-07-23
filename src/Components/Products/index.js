@@ -16,7 +16,7 @@ import DSAPrimaryButton from "../../Shared-Components/DSAPrimaryButton";
 import DSAEnhancedTable from "../../Shared-Components/DSAEnhancedTable";
 import DTModal from "../../Shared-Components/DSAModal";
 import { useEffect } from "react";
-import OkIcon from "../../Assets/Images/OkIcon.svg";
+import AddIcon from '@mui/icons-material/Add';
 import Error from "../../Assets/Images/Error.svg";
 import { ReactComponent as ReferenceIcon } from "../../Assets/Images/edit.svg";
 import { ReactComponent as LikeIcon } from "../../Assets/Images/likeIcon.svg";
@@ -49,18 +49,54 @@ const headerCells = [
     label: "Name",
     type: "text",
     align: "left",
-    minWidth: "150px",
+    minWidth: "100px",
     show: true,
   },
   {
-    id: "email",
+    id: "company",
     numeric: false,
     disablePadding: false,
-    label: "Email",
+    label: "Company",
+    type: "text",
+    avatar: true,
+    icon: true,
+    align: "left",
+    minWidth: "20px",
+    show: true,
+  },
+  {
+    id: "color",
+    numeric: false,
+    disablePadding: false,
+    label: "Vehical Color",
+    type: "text",
+    avatar: true,
+    icon: true,
+    align: "left",
+    minWidth: "20px",
+    show: true,
+  },
+  {
+    id: "description",
+    numeric: false,
+    disablePadding: false,
+    label: "Description",
     type: "text",
     avatar: false,
     align: "left",
     minWidth: "110px",
+    show: true,
+  },
+  {
+    id: "price",
+    numeric: false,
+    disablePadding: false,
+    label: "Price $",
+    type: "text",
+    avatar: false,
+    icon: false,
+    align: "left",
+    minWidth: "20px",
     show: true,
   },
   {
@@ -75,16 +111,16 @@ const headerCells = [
     minWidth: "20px",
     show: true,
   },
+
   {
-    id: "role",
+    id: "thumbnail",
     numeric: false,
     disablePadding: false,
-    label: "Role",
+    label: "Preview",
     type: "text",
-    avatar: false,
-    align: "left",
-    minWidth: "150px",
-    show: true,
+    avatar: true,
+    align: "center",
+    minWidth: "90px",
   },
   {
     id: "action",
@@ -109,6 +145,7 @@ const ProductsList = () => {
   const [openPermisson, setOpenPermisson] = useState(false);
   const [LoadingState, setloadingState] = useState(false);
   const [usersList, setUsersList] = useState([]);
+  const [productsList, setProductList] = useState([])
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [successModal, setSuccessModal] = useState(false);
@@ -122,85 +159,131 @@ const ProductsList = () => {
   const [currentUser, setCurrentUser] = useState(null)
   const dispatch = useDispatch();
   useEffect(() => {
-    getAllProducts();
+    getAllProductsList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getAllProductsList = async()=>{
+    const resp = await dispatch(getAllProducts());
+
+    if(resp){
+      setProductList(resp.payload.data)
+    }
+  }
   
-  const tableData = usersList?.map((item, index) => {
+  const tableData = productsList?.map((item, index) => {
     const data = {
       sr: index + 1,
       name:item.name,
-      email: item.email,
-      status: {
-        icons: [
-          {
+      company:item.company,
+      color:item.color,
+      description:item.description,
+      price:item?.price || 0,
+       status: {
+         icons: [
+           {
             element: (
-              <>
-                <p
-                  className={
-                    item.status === "Suspended"
-                      ? "suspended-background"
-                      : "active-background"
-                  }
-                >
-                  {item.status}
-                </p>
-              </>
-            ),
-          },
-        ],
-        value: `${" "}`,
-      },
-      role: item.role,
-      action: {
-        value: " ",
-        icons: [
-          {
-            element: (
-              <DSAToolTip placement="top" title={"Edit User"}>
-                <ReferenceIcon
-                  onClick={() => {
-                    setUser(item)
-                    setEditUser(true);
-                  }}
-                />
-              </DSAToolTip>
-            ),
-          },
-          {
-            element: (
-              <DSAToolTip placement="top" title={"User Permissons"}>
-                <LikeIcon
-                  onClick={() => {
-                    setOpenPermisson(true);
-                    setPermissonId(item.id);
-                    setCurrentUser(item)
-                  }}
-                  style={{
-                    marginLeft: "18px",
-                  }}
-                />
-              </DSAToolTip>
-            ),
-          },
-          {
-            element: (
-              <DSAToolTip placement="top" title={"Delete User"}>
-                <DeleteIcon
-                  onClick={() => {
-                    setDeleteEntry(true);
-                    setUserId(item.id);
-                  }}
-                  style={{
-                    marginLeft: "18px",
-                  }}
-                />
-              </DSAToolTip>
-            ),
-          },
-        ],
-      },
-      id: item.id,
+               <>
+                 <p
+                   className={
+                     item.available
+                       ? "active-background" : "suspended-background"
+                   }
+                 >
+                   {item.available ?  'Available' : 'Sold Out'}
+                 </p>
+               </>
+             ),
+           },
+         ],
+         value: `${" "}`,
+       },
+
+         thumbnail: {
+                  value: `${" "}`,
+                  icons: [
+                    {
+                      element: (
+                        <>
+                            <img
+                              src={item.image}
+                              alt=""
+                              style={{
+                                borderRadius: "0px",
+                                height: "60px",
+                                width: "60px",
+                                background: "#f3f3f3",
+                                aspectRatio: '1/1',
+                                objectFit: 'contain'
+                              }}
+                            />
+                        </>
+                      ),
+                    },
+                  ],
+                },
+      
+ action: {
+         value: " ",
+         icons: [
+           {
+             element: (
+               <DSAToolTip placement="top" title={"Edit Product"}>
+                 <ReferenceIcon
+                   onClick={() => {
+                     setUser(item)
+                     setEditUser(true);
+                   }}
+                 />
+               </DSAToolTip>
+             ),
+           },
+           {
+             element: (
+               <DSAToolTip placement="top" title={"Like"}>
+                 <LikeIcon
+                   onClick={() => {
+                     setCurrentUser(item)
+                   }}
+                   style={{
+                     marginLeft: "18px",
+                   }}
+                 />
+               </DSAToolTip>
+             ),
+           },
+           {
+             element: (
+               <DSAToolTip placement="top" title={"View Product"}>
+                 <DeleteIcon
+                   onClick={() => {
+                     setDeleteEntry(true);
+                     setUserId(item.id);
+                   }}
+                   style={{
+                     marginLeft: "18px",
+                   }}
+                 />
+               </DSAToolTip>
+             ),
+           },
+            {
+             element: (
+               <DSAToolTip placement="top" title={"Delete Product"}>
+                 <DeleteIcon
+                   onClick={() => {
+                     setDeleteEntry(true);
+                     setUserId(item.id);
+                   }}
+                   style={{
+                     marginLeft: "18px",
+                   }}
+                 />
+               </DSAToolTip>
+             ),
+           },
+         ],
+       },      id: item.id,
     };
     return data;
   });
@@ -357,7 +440,7 @@ const ProductsList = () => {
                   variant="subtitle2"
                   sx={{ fontSize: "14px", fontWeight: "500", color: "#818181" }}
                 >
-                  Local User Management
+                  List of All Vehicals
                 </Typography>
               </Grid>
               <Grid
@@ -392,68 +475,21 @@ const ProductsList = () => {
                       minWidth: "max-content",
                     }}
                   >
-                    {rowId.length ? <DSAPrimaryButton
-                      onClick={() => setDeleteEntry(true)}
-                      sx={{
-                        background: `${theme.palette.primary.dangerLight}`,
-                        color: `${theme.palette.primary.dangerDark}`,
-                        padding: "8px 8px !important",
-                        marginLeft: "10px",
-                        border: "1.5px solid rgba(236, 76, 76, 0.2)",
-                        borderRadius: "10px",
-                        minWidth: "50px",
-                        maxHeight: "50px",
-                      }}
-                      icon={
-                        <DeleteIconn
-                          sx={{
-                            fontSize: "22px",
-                            color: `${theme.palette.primary.notificationIconColor}`,
-                          }}
-                        />
-                      }
-                    /> : ''}
                     <DSAPrimaryButton
-                      disabled={selectedUser[0]?.status === 'Suspended' || !selectedUser.length || rowId.length > 1}
-                      sx={{ marginLeft: "15px", padding: "8px 22px" }}
+                      sx={{ marginRight: "-20px", padding: "8px 14px" }}
                       onClick={() => setSuspendUser(true)}
                     >
-                      <img src={Error} alt={"SuspendUser"} />
+                      <AddIcon sx={{fontSize:'18px', fontWeight:'bold', color: 'green'}} />
                       <Typography
                         sx={{
                           fontSize: `${theme.shapes.primaryBtnFontSize}`,
-                          marginLeft: "10px",
+                          marginLeft: "6px",
                         }}
                       >
-                        Suspend User
-                      </Typography>
-                    </DSAPrimaryButton>
-                    <DSAPrimaryButton
-                      sx={{ marginLeft: "15px", padding: "8px 22px" }}
-                      onClick={() => setSuspendUser(true)}
-                      disabled={selectedUser[0]?.status === 'Active' || !selectedUser.length || rowId.length > 1}
-                    >
-                      <img src={OkIcon} alt={"OkIcon"} />
-                      <Typography
-                        sx={{
-                          fontSize: `${theme.shapes.primaryBtnFontSize}`,
-                          marginLeft: "10px",
-                        }}
-                      >
-                        Active User
+                        Add Product
                       </Typography>
                     </DSAPrimaryButton>
 
-                    <DSASecondaryBTN
-                      onClick={() => setAddLocalUser(true)}
-                      sx={{
-                        marginLeft: "10px",
-                        padding: "9px 20px",
-                        fontWeight: "500",
-                      }}
-                    >
-                      + Add
-                    </DSASecondaryBTN>
                   </Stack>
                 </Grid>
               </Grid>
