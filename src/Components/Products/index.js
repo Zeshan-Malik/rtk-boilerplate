@@ -11,6 +11,7 @@ import {
   Divider,
 } from "@mui/material";
 
+import AddNewProduct from'./addProduct'
 import theme from "../../Config/theme";
 import DTTextField from "../../Shared-Components/DTTextField";
 import DSASecondaryBTN from "../../Shared-Components/DSASecondaryIconButton";
@@ -433,6 +434,9 @@ const ProductsList = () => {
         Name: tempData.name,
         Company: tempData.company,
         Color: tempData.color,
+        Model: tempData.model,
+        Type:tempData.type,
+        Price: (tempData.price || 0),
         ImageURL: tempData.image,
       };
       currentProductDescription.current = tempData.description;
@@ -532,7 +536,7 @@ const ProductsList = () => {
                   >
                     <DSAPrimaryButton
                       sx={{ marginRight: "-20px", padding: "8px 14px" }}
-                      onClick={() => setSuspendUser(true)}
+                      onClick={() => setAddLocalUser(true)}
                     >
                       <AddIcon
                         sx={{
@@ -889,31 +893,13 @@ const ProductsList = () => {
           </Formik>
         </Grid>
       </DTModal>
-      {console.log("currentProduct.current", currentProduct.current)}
 
       <DTModal
         open={viewdetails}
         dialogStateHandle={setviewdetails}
         resetFields={() => console.log("closed")}
         hideModalActionBtn
-        heading={"Car Details are here"}
-        icon={
-          <DSAPrimaryButton
-            sx={{ marginLeft: "15px", padding: "8px 12px" }}
-            onClick={() => setItemPreview(true)}
-          >
-            <img src={preview} alt={"popImage"} />
-            <Typography
-              sx={{
-                fontSize: `${theme.shapes.primaryBtnFontSize}`,
-                marginLeft: "10px",
-                fontWeight: "600",
-              }}
-            >
-              Preview
-            </Typography>
-          </DSAPrimaryButton>
-        }
+        heading={"Product Details"}
         sx={{
           "& .MuiDialog-paper": {
             maxWidth: "60vw",
@@ -1075,6 +1061,7 @@ const ProductsList = () => {
           </Grid>
         </Grid>
       </DTModal>
+      <AddNewProduct />
     </>
   );
 };

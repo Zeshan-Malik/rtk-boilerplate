@@ -4,10 +4,6 @@ import styled from "@emotion/styled";
 import "../App.css";
 import { useSelector } from "react-redux";
 const DTSelect = (props) => {
-  const currentUser = useSelector((state) => state.locationplayer.currentUser);
-  let themeObj = currentUser?.length !== 0 ? currentUser?.theme : "";
-  let appIconColor = "#" + themeObj?.app_icon_color;
-
   const SelectBox = styled(Select)(({ theme }) => ({
     color: "#6D7A83",
     fontSize: "14px",
