@@ -599,10 +599,10 @@ img {
 }
 
 .compose-email {
-  max-height: 20vh;
-  height: 20vh;
+  max-height: 10vh;
+  height: 10vh;
   resize: none;
-  width: 44vw;
+  width: 28.5vw;
   border-color: transparent;
   border-radius: 12px;
   padding: 12px;

@@ -8,7 +8,8 @@ const API = {
   },
   Products: {
     allProducts: `${BASE_URL}products`,
-    createNewProduct: `${BASE_URL}product`,
+    getProductById: `${BASE_URL}product`,
+    createNewProduct: `${BASE_URL}new`,
   },
   JSONPLACEHOLDER: {
     todos: '/todosss',

@@ -51,7 +51,9 @@ function PaperComponent(props) {
 const DTModal = (props) => {
   const handleClose = () => {
     props.dialogStateHandle(false);
-    props.resetFields();
+    if(props.resetFieldsCall){
+      props.resetFields();
+    }
   };
   return (
     <BootstrapDialog

@@ -38,6 +38,8 @@ import { Formik, Form } from "formik";
 import DTEmailField from "../../Shared-Components/DTEmailField";
 import styled from "styled-components";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {getShortString} from '../../services/utils'
+
 import {
   getAllProducts,
   createNewProduct,
@@ -176,6 +178,7 @@ const ProductsList = () => {
   const [secondAcrodion, setSecondAcrodion] = useState(false);
   const [viewdetails, setviewdetails] = useState(false);
   const [itemPreview, setItemPreview] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -196,7 +199,7 @@ const ProductsList = () => {
       name: item.name,
       company: item.company,
       color: item.color,
-      description: item.description,
+      description: getShortString(item.description),
       price: item?.price || 0,
       status: {
         icons: [
@@ -536,7 +539,7 @@ const ProductsList = () => {
                   >
                     <DSAPrimaryButton
                       sx={{ marginRight: "-20px", padding: "8px 14px" }}
-                      onClick={() => setAddLocalUser(true)}
+                      onClick={() => setOpenAddModal(true)}
                     >
                       <AddIcon
                         sx={{
@@ -1061,7 +1064,9 @@ const ProductsList = () => {
           </Grid>
         </Grid>
       </DTModal>
-      <AddNewProduct />
+      { openAddModal ? 
+      <AddNewProduct openAddModal={openAddModal} setOpenAddModal = {setOpenAddModal} /> : ""
+      }
     </>
   );
 };

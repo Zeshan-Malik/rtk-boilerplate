@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../Config/APIConfigs";
-import { getResources } from "../../services/axios/ApiMethods";
+import { getResources,postResources } from "../../services/axios/ApiMethods";
 
 const initialDashboardState = {
   playerList: [],
@@ -18,7 +18,7 @@ export const getAllProducts = createAsyncThunk("AllProducts",async (data) => {
  });
 
  export const createNewProduct = createAsyncThunk("createProduct", (data) => {
-  const response = getResources(API.Products.createNewProduct)
+  const response = postResources(API.Products.createNewProduct,data)
   return response
  });
  export const deleteProduct = createAsyncThunk("deleteProduct", (data) => {
@@ -31,7 +31,7 @@ export const getAllProducts = createAsyncThunk("AllProducts",async (data) => {
  });
 
  export const getProductById = createAsyncThunk("getProductById", (param) => {
-  const response = getResources(API.Products.createNewProduct+param)
+  const response = getResources(API.Products.getProductById+param)
   return response
  });
 

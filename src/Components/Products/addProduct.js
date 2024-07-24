@@ -24,7 +24,7 @@ import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PersonIcon from "@mui/icons-material/Person";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
-
+import {createNewProduct} from './productsSlice'
 const AddNewProduct = (props) => {
   const dispatch = useDispatch();
 
@@ -35,42 +35,19 @@ const AddNewProduct = (props) => {
   });
   // map states
 
-  const [licenseCode, setLicenseCode] = useState("");
-  const [licenseId, setLicenseId] = useState("");
-  const [playlist, setPlayList] = useState([]);
-  const [startupContent, setStartupContent] = useState("Playlist");
-  const [contactName, setContactName] = useState("");
-  const [email, setEmail] = useState("");
-  const [modal, setModal] = useState("");
   const [productName, setProductName] = useState("");
-
+  const [productPrice, setProductPrice] = useState("");
+  const [productCompanyName, setProductCompanyName] = useState('');
+  const [productColor, setProductColor] = useState("");
+  const [productType, setProductType] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("");
+  const [modal, setModal] = useState("")
   const [msg, errorMsg] = useState("");
   const [openToast, setOpenToast] = useState(false);
   const [error_type, errorType] = useState("");
  
-
-  // get text added in textarea
-  const handleAddMessage = () => {
-    const val = document.getElementById("text-area").value;
-    // setTextAreaVal(val);
-  };
-  // method to restrict user to enter only numbers in location code
-  const getNumbers = (e) => {
-    var letters = /^[0-9]+$/;
-    if (e.length && e.match(letters)) {
-      setModal(e);
-    } else if (!e.length) {
-      setModal("");
-    }
-  };
-
-  // Method to append text in text area of configure email modal
-  const appendText = (text) => {
-    let element = document.getElementById("text-area");
-    element.value = element.value + text;
-  };
-
-
   const productsTypeArray = ['Car', 'Bike', 'Jeep', 'Truck']
   // to add new location
   const handleToasts = (message) => {
@@ -78,28 +55,41 @@ const AddNewProduct = (props) => {
     errorType("error");
     setOpenToast(true);
   };
-  // method to validate emails
-  const validateEmail = (email) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  };
+  
   // location values validation
   const handleValidation = () => {
-    if (!licenseId) {
+    if (!productType) {
       handleToasts("License code is Required");
     } else if (!modal) {
       handleToasts("Location code is Required");
     } else if (!productName.length) {
       handleToasts("Location name is Required");
-    } else if (email.length && !validateEmail(email)) {
-      handleToasts('Email field should be an e-mail address in the format "user@example.com"');
-    } else {
-      saveLocation();
+    } else if (!productColor.length) {
+      handleToasts("Location name is Required");
+    } else if (!imageUrl.length) {
+      handleToasts("Location name is Required");
+    }else if (productPrice<1) {
+      handleToasts("Location name is Required");
+    }else {
+      saveProductToDB();
     }
   };
   // method to save locations
-  const saveLocation = async () => {
-  
+  const saveProductToDB = async () => {
+    const payload ={
+      name:productName,
+      price:productPrice,
+      company:productCompanyName,
+      color:productColor,
+      productType:productType,
+      image:imageUrl,
+      description:description,
+      available:(status ==='Available' ? true:false),
+      productModal:modal}
+
+      const resp = await dispatch(createNewProduct(payload))
+
+      props.setOpenAddModal(false);
   };
 
   const CustomSpan = styled("span")(({ theme }) => ({
@@ -112,19 +102,19 @@ const AddNewProduct = (props) => {
   return (
     <>
       <DTModal
-        // hideModalActionBtn
-        leftbtn={'Hello'}
-        rightbtn={'World'}
-        exectueRequest={saveLocation}
-        open={true}
-        dialogStateHandle={props.setAddLocation}
+        leftbtn={'Cancel'}
+        rightbtn={'Save'}
+        exectueRequest={saveProductToDB}
+        open={props.openAddModal}
+        resetFieldsCall = {false} 
+        dialogStateHandle={props.setOpenAddModal}
         heading={"Add Product"}
         sx={{
           "& .MuiDialog-paper": {
             maxWidth: "30vw",
             width: "30vw",
-            maxHeight: "60vh !important",
-            height: "60vh !important",
+            maxHeight: "81vh !important",
+            height: "81vh !important",
             padding: "0px 30px 0px 30px",
           },
         }}
@@ -164,8 +154,8 @@ const AddNewProduct = (props) => {
                   Product Type
                 </CustomSpan>
                 <DSASelect
-                  value={licenseId}
-                  onChange={(e) => setLicenseId(e.target.value)}
+                  value={productType}
+                  onChange={(e) => setProductType(e.target.value)}
                 >
                   {productsTypeArray?.map((m) => {
                     return (
@@ -185,11 +175,11 @@ const AddNewProduct = (props) => {
                     color: "#5d953c",
                   }}
                 >
-                  Product Type
+                  Product Modal
                 </CustomSpan>
                 <DSASelect
-                  value={licenseId}
-                  onChange={(e) => setLicenseId(e.target.value)}
+                  value={modal}
+                  onChange={(e) => setModal(e.target.value)}
                 >
                   {modalYear?.map((m) => {
                     return (
@@ -201,30 +191,81 @@ const AddNewProduct = (props) => {
                 </DSASelect>
               </Box>
             </Grid>
+             <Grid> 
+            <DTTextField
+            label={"Vechical Company Name"}
+            sx={{ marginTop: "15px", fontSize: "14" }}
+            value={productCompanyName}
+            onChange={(e) => setProductCompanyName(e.target.value)}
+          />
+            </Grid>
+            <Grid> 
+            <DTTextField
+            label={"Vechical Color"}
+            sx={{ marginTop: "15px", fontSize: "14" }}
+            value={productColor}
+            onChange={(e) => setProductColor(e.target.value)}
+          />
+            </Grid>
             <Grid> 
             <DTTextField
             label={"Product Price"}
             sx={{ marginTop: "15px", fontSize: "14" }}
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
+            value={productPrice}
+            onChange={(e) => setProductPrice(e.target.value)}
           />
             </Grid>
              <Grid>
               <DTTextField
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                label={"Email"}
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                label={"Paste Image Url"}
                 sx={{ fontSize: "14" }}
               />
             </Grid>
             <Grid>
-              <DTTextField
-                label={"Contact Name"}
-                sx={{ fontSize: "14" }}
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
-              />
+              <Box mt={1.2}>
+                <CustomSpan
+                  sx={{
+                    color: "#5d953c",
+                  }}
+                >
+                  Availability Status
+                </CustomSpan>
+                <DSASelect
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  {['Availble', 'Not Available']?.map((m) => {
+                    return (
+                      <MenuItem
+                        value={m}
+                      >{m} </MenuItem>
+                    );
+                  })}
+                </DSASelect>
+              </Box>
             </Grid>
+             <Grid>
+          <Typography
+            mt={2}
+            mb={1}
+            variant="subtitle2"
+            sx={{
+              fontSize: "14px",
+              fontWeight: "500",
+              color: theme.palette.pageHeadingColor,
+            }}
+          >
+            Description
+          </Typography>
+          <textarea
+            className="compose-email"
+            id="text-area"
+            onChange = {(e) => setDescription(e.target.value)}
+            placeholder="Enter description here..."
+          />
+        </Grid>
           </Grid>
         </Grid>
       </DTModal>

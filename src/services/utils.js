@@ -35,3 +35,10 @@ export const handleApiError = (error) => {
     }
     return `rgba(${r},${g},${b},${opacity})`;
   };
+
+  export const getShortString = (text, length =17) => {
+    if (text.length > 25) {
+      return text.substr(0, length) + "...";
+    }
+    return text;
+  };
