@@ -10,6 +10,7 @@ const API = {
     allProducts: `${BASE_URL}products-list`,
     getProductById: `${BASE_URL}product`,
     createNewProduct: `${BASE_URL}new`,
+    dashboardCategories : `${BASE_URL}products-by-category`
   },
   JSONPLACEHOLDER: {
     todos: '/todosss',

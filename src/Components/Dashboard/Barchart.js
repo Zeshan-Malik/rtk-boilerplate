@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useDispatch } from "react-redux";
-// import { GetBarChartData } from "./dashboardSlice";
+import { getGraphsData } from "./dashboardSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function Graphs() {
@@ -17,21 +17,20 @@ export default function Graphs() {
   const dispatch = useDispatch();
   const [chartsData, setChartsData] = useState([]);
   const getData = async () => {
-    const playerParams = "?_dc=1675165241900&page=1&start=0&limit=25";
     const response = {
-      Honda: 8,
-      Toyota: 10,
-      KIA :22,
+      Honda: 1,
+      Toyota: 1,
+      KIA :1,
       Buggati :1,
-      Ferrari:2,
-      Mehran:4,
-      Suzuki:4}
-    // const response = await dispatch(GetBarChartData(playerParams));
+      Ferrari:1,
+      Mehran:1,
+      Suzuki:1}
+    const res = await dispatch(getGraphsData());
     let keys = Object.keys(response);
     let tempData = keys?.map((item, index) => ({
       [item]: response[item]
     }));
-    setChartsData(tempData);
+    setChartsData([res.payload.data.data, ...tempData]);
   };
   useEffect(() => {
     getData();
@@ -74,14 +73,16 @@ export default function Graphs() {
   return (
     <ResponsiveContainer>
       <BarChart
-        barGap={-10}
+      width={600}
+        barGap={'auto'}
         data={chartsData}
         margin={{
           top: 30,
           bottom: 0,
           right: 30,
         }}
-        barCategoryGap={5}
+          barSize={20}
+        barCategoryGap={15}
       >
         <YAxis
           width={40}
@@ -106,60 +107,20 @@ export default function Graphs() {
 
         />
         <Bar
-          onClick={() => redirectToPlayer("Unsync")}
-          dataKey="Toyota"
+          dataKey="Buggati"
           fill="#DAA520"
           radius={[10, 10, 10, 10]}
           onMouseEnter={showTooltip}
           onMouseLeave={hideTooltip}
         />
         <Bar
-          onClick={() => redirectToPlayer("Unreachable")}
-          dataKey="Buggati"
+          dataKey="Toyota"
           fill="#FF3333"
           radius={[10, 10, 10, 10]}
           onMouseEnter={showTooltip}
           onMouseLeave={hideTooltip}
         />
-        <Bar
-          onClick={() => redirectToPlayer("Error")}
-          dataKey="Ferrari"
-          fill="#2D2D2D"
-          radius={[10, 10, 10, 10]}
-          onMouseEnter={showTooltip}
-          onMouseLeave={hideTooltip}
-        />
-        <Bar
-          onClick={() => redirectToPlayer("Expired")}
-          dataKey="Expired"
-          fill="rgb(102, 0, 0)"
-          radius={[10, 10, 10, 10]}
-          onMouseEnter={showTooltip}
-          onMouseLeave={hideTooltip}
-        />
-        <Bar
-          onClick={() => redirectToPlayer("Idle")}
-          dataKey="Mehran"
-          fill="#808080"
-          radius={[10, 10, 10, 10]}
-          onMouseEnter={showTooltip}
-          onMouseLeave={hideTooltip}
-        />
-        <Bar
-          onClick={() => redirectToPlayer("Downloading")}
-          dataKey="Suzuki"
-          fill="#FFD700"
-          radius={[10, 10, 10, 10]}
-          onMouseEnter={showTooltip}
-          onMouseLeave={hideTooltip}
-        />
-        {tooltip.show && (
-          <Tooltip
-            wrapperStyle={{ outline: "none" }}
-            cursor={false}
-            content={<CustomTooltip {...tooltip} />}
-          />
-        )}
+              )}
       </BarChart>
     </ResponsiveContainer>
   );

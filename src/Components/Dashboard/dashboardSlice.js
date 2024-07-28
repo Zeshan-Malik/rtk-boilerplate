@@ -8,7 +8,7 @@ const initialDashboardState = {
 };
 
 export const getGraphsData = createAsyncThunk("DashboardIndex", (data) => {
- const response = getResources(API.JSONPLACEHOLDER.todos)
+ const response = getResources(API.Products.dashboardCategories)
  return response
 });
 

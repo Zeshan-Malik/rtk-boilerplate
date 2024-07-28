@@ -8,7 +8,7 @@ const DashboardTab = () => {
 
   setTimeout(() => {
     setLoading(false)
-  }, 2000)
+  }, 4000)
   return (
     <>
       {loading ? (
