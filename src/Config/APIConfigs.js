@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5001/api/'
+const BASE_URL = 'http://localhost:5000/api/v1/'
 
 const API = {
   Auth: {
@@ -7,7 +7,7 @@ const API = {
     LogOut: `${BASE_URL}logout`,
   },
   Products: {
-    allProducts: `${BASE_URL}products`,
+    allProducts: `${BASE_URL}products-list`,
     getProductById: `${BASE_URL}product`,
     createNewProduct: `${BASE_URL}new`,
   },

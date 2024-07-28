@@ -58,9 +58,9 @@ const AddNewProduct = (props) => {
   
   // location values validation
   const handleValidation = () => {
-    if (!productType) {
+    if (!productType.length) {
       handleToasts("License code is Required");
-    } else if (!modal) {
+    } else if (!modal.length) {
       handleToasts("Location code is Required");
     } else if (!productName.length) {
       handleToasts("Location name is Required");
@@ -68,7 +68,9 @@ const AddNewProduct = (props) => {
       handleToasts("Location name is Required");
     } else if (!imageUrl.length) {
       handleToasts("Location name is Required");
-    }else if (productPrice<1) {
+    }else if (!modal.length) {
+      handleToasts("Location name is Required");
+    }else if (!productCompanyName.length) {
       handleToasts("Location name is Required");
     }else {
       saveProductToDB();

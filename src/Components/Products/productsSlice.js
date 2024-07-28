@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../Config/APIConfigs";
-import { getResources,postResources } from "../../services/axios/ApiMethods";
+import { getResources,postResources, putResources } from "../../services/axios/ApiMethods";
 
 const initialDashboardState = {
   playerList: [],
@@ -25,8 +25,8 @@ export const getAllProducts = createAsyncThunk("AllProducts",async (data) => {
   const response = getResources(API.Products.createNewProduct)
   return response
  });
- export const updateProduct = createAsyncThunk("updateProduct", (data) => {
-  const response = getResources(API.Products.createNewProduct)
+ export const updateProduct = createAsyncThunk("updateProduct", (param) => {
+  const response = putResources(API.Products.getProductById+param)
   return response
  });
 

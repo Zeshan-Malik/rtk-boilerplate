@@ -254,7 +254,7 @@ const ProductsList = () => {
               <DSAToolTip placement="top" title={"Edit Product"}>
                 <ReferenceIcon
                   onClick={() => {
-                    setUser(item);
+                    handleChangeStatus(item._id);
                     setEditUser(true);
                   }}
                 />
@@ -280,7 +280,6 @@ const ProductsList = () => {
               <DSAToolTip placement="top" title={"View Product"}>
                 <VisibilityIcon
                   onClick={() => {
-                    console.log("_id", item._id);
                     getProductDetails(item._id);
                   }}
                   style={{
@@ -379,22 +378,19 @@ const ProductsList = () => {
     }
   };
 
-  const handleChangeStatus = async () => {
-    const response = await dispatch(updateProduct(rowId[0]));
+  const handleChangeStatus = async (id) => {
+    const payload = `?id=${id}`
+    const response = await dispatch(updateProduct(payload));
     if (response.payload.data.success) {
       setOpenToast(true);
-      setSelectedUser([]);
-      setRowId([]);
       errorMsg("User susspended successfully");
       errorType("success");
       setEditUser(false);
-      getAllProducts();
     } else {
       setOpenToast(true);
       errorMsg(response.payload.data.msg);
       errorType("error");
     }
-    setSuspendUser(false);
   };
 
   const ErrorSpace = styled("span")(({ theme }) => ({
